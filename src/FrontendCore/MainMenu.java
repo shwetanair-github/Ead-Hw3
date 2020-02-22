@@ -15,7 +15,8 @@ public class MainMenu extends Frame implements ActionListener {
 	 private Label lblText;    // Declare a Label component 
 	   
 	   private Button btnCount;   // Declare a Button component
-	   private String listToDisplay;    // Text
+	   private String productInfo;
+	   private ArrayList<String> listToDisplay = new ArrayList<String>();    // Text
 	   JFrame master = new JFrame("New frame");
 	  
 	 
@@ -29,6 +30,7 @@ public class MainMenu extends Frame implements ActionListener {
 	      master.add(btnCount);                    // "super" Frame container adds Button component
 	      
 	      lblText = new Label("Text");  // construct the Label component
+	      lblText.setPreferredSize(new Dimension(300,100));
 	      master.add(lblText);                    // "super" Frame container adds Label component
 	 
 	      btnCount.addActionListener(this);
@@ -45,23 +47,21 @@ public class MainMenu extends Frame implements ActionListener {
 	   
 	   public void displayListInFrame(ArrayList<ListElement> flowerShopImsList) {
 		   System.out.println("The IMS list size: "+flowerShopImsList.size());
-			for (Object obj : flowerShopImsList) {   
+		   for (Object obj : flowerShopImsList) { 
 	            ListElement node = (ListElement) obj;
-	            listToDisplay= node.getProductID() + node.getProductName()+ node.getSalePrice()
+	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	            System.out.println(" list :- " + listToDisplay);
-	        
-				}
-		
+	            System.out.println(" list :- " + productInfo);
+	            listToDisplay.add(productInfo);
+		   	}
 	   }
-	 
-	   
 	 
 	   // ActionEvent handler - Called back upon button-click.
 	   public void actionPerformed(ActionEvent evt) {
-	      
-	      // Display the counter value on the TextField tfCount
-		   lblText.setText(""+listToDisplay); 
+		   displayListInFrame(ListOperations.flowerShopImsList);
+		   
+	      // Display the counter value on the TextField 
+		   lblText.setText(""+listToDisplay);
 
 	   }
 
