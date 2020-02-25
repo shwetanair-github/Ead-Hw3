@@ -15,7 +15,8 @@ public class MainMenu extends JFrame implements ActionListener {
 	JFrame master;
 	
 	//Declare panels
-	private JPanel mainP, titleP, addP, addFormP, addButtonP, productListP, tableP, searchP, editP, invP, sortP;
+	private JPanel mainP, titleP, addP, addFormP, addButtonP, productListP, searchP, editP, invP, sortP;
+	private JScrollPane tableP;
 	
 	//Declare labels
 	private JLabel lblText, titleL, sortL, idL, vendorL, typeL, locationL, priceL, quantityL, nameL; 
@@ -55,9 +56,11 @@ public class MainMenu extends JFrame implements ActionListener {
 		addP = new JPanel();
 		addFormP = new JPanel();
 		addButtonP = new JPanel();
+		
 		addP.setLayout(new BoxLayout(addP,BoxLayout.Y_AXIS));
-		addP.setBorder(BorderFactory.createLoweredBevelBorder());
 		addFormP.setLayout(new GridLayout(7,2));
+		
+		addP.setBorder(BorderFactory.createLoweredBevelBorder());
 		addFormP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		addButtonP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
@@ -99,15 +102,16 @@ public class MainMenu extends JFrame implements ActionListener {
 		addP.add(addButtonP);
 		
 		mainP.add(addP, BorderLayout.LINE_START);
-		
+
 		//ProductList panel
 		productListP = new JPanel();
 		searchP = new JPanel();
-		tableP = new JPanel();
 		sortP = new JPanel();
 		
 		productListP.setLayout(new BoxLayout(productListP, BoxLayout.Y_AXIS));
-		tableP.setPreferredSize(new Dimension(50,50));
+		
+		productListP.setBorder(BorderFactory.createLoweredBevelBorder());
+		sortP.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		
 		//Search Panel
 		allB = new JButton("View All");
@@ -121,11 +125,11 @@ public class MainMenu extends JFrame implements ActionListener {
 		searchP.add(searchB);
 		
 		//Table Panel
-		listT = new JTable();
+		listT = createTable(ListOperations.flowerShopImsList);
+		listT.setFillsViewportHeight(true);
 		
-		String[] colNames = {"Product ID","Product Name","Vendor","ProductType","Location","Price","Quantity","Discount"};
-		//Object[][] data = {001, "Lily",""}
-		tableP.add(listT);
+		tableP = new JScrollPane(listT);
+		tableP.setPreferredSize(new Dimension(20,200));
 		
 		//Sort Panel
 		sortL = new JLabel("Sort By: ");
@@ -157,26 +161,40 @@ public class MainMenu extends JFrame implements ActionListener {
 		productListP.add(sortP);
 		
 		mainP.add(productListP, BorderLayout.LINE_END);
-		
-		 /* //Inventory panel that displays all product invP = new JPanel(); lblText =
-		 * new JLabel(); // construct the Label component lblText.setPreferredSize(new
-		 * Dimension(800,100)); invP.add(lblText); // "super" Frame container adds Label
-		 * component titleP.add(invP); */
 	   
+		//Set super Frame properties
 	    master.setTitle("Flower shop IMS Main Menu");  // "super" Frame sets its title
-	    master.setSize(1000, 500);        // "super" Frame sets its initial window size
-	 
+	    master.setSize(1100, 500);        // "super" Frame sets its initial window size
+	    master.setResizable(false);
+	    
 	    master.setVisible(true);         // "super" Frame shows
-	    master.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	    master.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
 	    
 	    }
-	   
-	   public void displayListInFrame(ArrayList<ListElement> flowerShopImsList) {
-		   System.out.println("The IMS list size: "+flowerShopImsList.size());
-		   //tableModel = new DefaultTableModel(colNames,flowerShopImsList.size());
-		   //listTable = new JTable(tableModel);
-		   for (Object obj : flowerShopImsList) {
-			   //tableModel.addRow(obj);
+	
+		public JTable createTable(ArrayList<ListElement> arrayList) {
+			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","Vendor","Quantity","Discount"};
+			tableModel = new DefaultTableModel(colNames,0);
+			JTable table = new JTable(tableModel);
+			
+			for (ListElement obj: arrayList) {
+				int id = obj.getProductID();
+				String name = obj.getProductName();
+				String type = obj.getProductType();
+				double price = obj.getSalePrice();
+				String location = obj.getLocation();
+				int vendorID = obj.getVendorID();
+				int quantity = obj.getQuantityOnHand();
+				boolean discount = obj.getDiscount();
+				
+				Object[] product = {id, name, type, price, location, vendorID, quantity, discount};
+				tableModel.addRow(product);
+			}
+			return table;
+		}
+		
+		public void displayListInFrame(ArrayList<ListElement> flowerShopImsList) {
+			for (Object obj : flowerShopImsList) {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
@@ -188,10 +206,8 @@ public class MainMenu extends JFrame implements ActionListener {
 	   // ActionEvent handler - Called back upon button-click.
 	   public void actionPerformed(ActionEvent e) {
 		   if(e.getSource() == allB) {
-		   displayListInFrame(ListOperations.flowerShopImsList);
-		  
-	       // Display the counter value on the TextField tfCount
-		   lblText.setText(""+listToDisplay);
+			   listT = createTable(ListOperations.flowerShopImsList);
+			   listT.setFillsViewportHeight(true);
 		   }
 		   
 		   if(e.getSource() == vendorB) {
