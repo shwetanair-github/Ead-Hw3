@@ -14,7 +14,7 @@ import backendCore.ListElement;
 
 public class ListOperations extends ListElement{
 	
-	ArrayList<ListElement> flowerShopImsList = new ArrayList<ListElement>();
+	public static ArrayList<ListElement> flowerShopImsList = new ArrayList<ListElement>();
 	int arraySize=0;
 	MainMenu mainMenuObj =new MainMenu();
 
