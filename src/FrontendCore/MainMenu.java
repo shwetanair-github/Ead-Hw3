@@ -36,8 +36,6 @@ public class MainMenu extends JFrame implements ActionListener {
 	private DefaultTableModel tableModel;
 	private JTable listT;
 	
-	//Create instance of the ListOperations class
-	
 	// Constructor to setup GUI components and event handlers
 	public MainMenu () {
 		master = new JFrame();   // "super" Frame, which is a Container

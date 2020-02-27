@@ -98,6 +98,5 @@ public class ListOperations extends ListElement{
 	    element.setDiscount(Discount);
 	    flowerShopImsList.add(element);
 		mainMenuObj.displayListInFrame(flowerShopImsList);
-		
 		}
 }

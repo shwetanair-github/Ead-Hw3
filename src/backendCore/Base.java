@@ -28,12 +28,6 @@ public static void main(String args[]) {
     listoperation.push(10, "orchid seeds", "seeds", 1.69, "Chicago", 3, 68, false);
     listoperation.push(11, "daisy", "flower", 1.49, "Chicago", 3, 200, true);
     listoperation.push(12, "daisy seeds", "seeds", 0.99, "Chicago", 2, 178, false);
-    
-    
-    
-    
-    
-
    
     listoperation.displayFullList();
     
