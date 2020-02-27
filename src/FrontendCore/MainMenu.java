@@ -15,26 +15,28 @@ public class MainMenu extends JFrame implements ActionListener {
 	JFrame master;
 	
 	//Declare panels
-	private JPanel mainP, titleP, addP, addFormP, addButtonP, productListP, searchP, editP, invP, sortP;
+	private JPanel mainP, titleP, addP, addFormP, editButtonP, updateP, productListP, searchP, sortP;
 	private JScrollPane tableP;
 	
 	//Declare labels
-	private JLabel lblText, titleL, sortL, idL, vendorL, typeL, locationL, priceL, quantityL, nameL; 
+	private JLabel lblText, titleL, sortL, idL, vendorL, typeL, locationL, priceL, quantityL, nameL, discountL; 
 	
 	//Declare text field
-	private JTextField searchTF, idTF, vendorTF, typeTF, locationTF, priceTF, quantityTF, nameTF;
+	private JTextField searchTF, idTF, vendorTF, typeTF, locationTF, priceTF, quantityTF, nameTF, discountTF;
 	
 	//Declare buttons
 	private JButton allB, searchB, vendorB, typeB, locationB, 
-		priceB, quantityB, discountB, addB, removeB, editB; 
+		priceB, quantityB, discountB, addB, removeB, updateB;
 	
 	//Declare strings
 	private String productInfo;
 	private ArrayList<String> listToDisplay = new ArrayList<String>();  
 	
-	//Declare tables
+	//Declare table
 	private DefaultTableModel tableModel;
 	private JTable listT;
+	
+	//Create instance of the ListOperations class
 	
 	// Constructor to setup GUI components and event handlers
 	public MainMenu () {
@@ -45,33 +47,38 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		//Panel for title
 		titleP = new JPanel();
-		titleP.setBackground(Color.green);
-		titleL = new JLabel("Flower Shop IMS");
-		titleL.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-		titleL.setFont(titleL.getFont().deriveFont(50.0f));
-		titleP.add(titleL);
-		master.add(titleP, BorderLayout.PAGE_START);
+		titleP.setBackground(Color.green);    //Sets title panel's background color
+		titleL = new JLabel("Flower Shop IMS");   //Set title text
+		titleL.setAlignmentX(JLabel.CENTER_ALIGNMENT);  //Aligns the title to the center
+		titleL.setFont(titleL.getFont().deriveFont(50.0f));  //Change font size
 		
-		//Panel to add a product
+		titleP.add(titleL);   //Adds title text to title panel
+		master.add(titleP, BorderLayout.PAGE_START);  //Adds title panel to "super" Frame
+		
+		//Edit panel with add & update buttons
 		addP = new JPanel();
 		addFormP = new JPanel();
-		addButtonP = new JPanel();
+		editButtonP = new JPanel();
 		
-		addP.setLayout(new BoxLayout(addP,BoxLayout.Y_AXIS));
-		addFormP.setLayout(new GridLayout(7,2));
+		addP.setLayout(new BoxLayout(addP,BoxLayout.Y_AXIS));   //Sets layout to edit panel for all containers in this panel to a vertical alignment
+		addP.setPreferredSize(new Dimension(400,300));  //sets size of the edit panel
+		addFormP.setLayout(new GridLayout(8,2));   //sets a grid layout to the add form
 		
 		addP.setBorder(BorderFactory.createLoweredBevelBorder());
 		addFormP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		addButtonP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		editButtonP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
+		//Initialize labels
 		idL = new JLabel("Product ID");
 		nameL = new JLabel("Name");
 		typeL = new JLabel("Type");
 		priceL = new JLabel("Price");
 		quantityL = new JLabel("Quantity on Hand");
 		locationL = new JLabel("Location");
-		vendorL = new JLabel("Vendor");
+		vendorL = new JLabel("VendorID");
+		discountL = new JLabel("Discount");
 		
+		//Initialize text fields
 		idTF = new JTextField(15);
 		nameTF = new JTextField(15);
 		typeTF = new JTextField(15);
@@ -79,10 +86,16 @@ public class MainMenu extends JFrame implements ActionListener {
 		quantityTF = new JTextField(15);
 		locationTF = new JTextField(15);
 		vendorTF = new JTextField(15);
+		discountTF = new JTextField("Enter true or false",15);
 		
+		//initialize buttons
 		addB = new JButton("Add Product");
-		addB.addActionListener(this);
+		updateB = new JButton("Update Product");
 		
+		addB.addActionListener(this);
+		updateB.addActionListener(this);
+		
+		//Add components to the edit panel
 		addFormP.add(idL);
 		addFormP.add(idTF);
 		addFormP.add(nameL);
@@ -97,28 +110,32 @@ public class MainMenu extends JFrame implements ActionListener {
 		addFormP.add(locationTF);
 		addFormP.add(vendorL);
 		addFormP.add(vendorTF);
-		addButtonP.add(addB);
+		addFormP.add(discountL);
+		addFormP.add(discountTF);
+		editButtonP.add(addB);
+		editButtonP.add(updateB);
 		addP.add(addFormP);
-		addP.add(addButtonP);
+		addP.add(editButtonP);
 		
+		//Add edit panel to the main panel
 		mainP.add(addP, BorderLayout.LINE_START);
 
-		//ProductList panel
+		//ProductList panel that displays the product inventory
 		productListP = new JPanel();
 		searchP = new JPanel();
 		sortP = new JPanel();
 		
+		//Set formats for panels
 		productListP.setLayout(new BoxLayout(productListP, BoxLayout.Y_AXIS));
-		
 		productListP.setBorder(BorderFactory.createLoweredBevelBorder());
 		sortP.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		
 		//Search Panel
-		allB = new JButton("View All");
-		allB.addActionListener(this);
+		allB = new JButton("View All");   //Initialize "View All" button
+		allB.addActionListener(this);     //Add actionlistener to "View All" button
 		
-		searchTF = new JTextField(20);
-		searchB = new JButton("Search");
+		searchTF = new JTextField("Input product ID or product name to search");  //Initialize search textfield
+		searchB = new JButton("Search");  //Initialize search button
 		
 		searchP.add(allB);
 		searchP.add(searchTF);
@@ -129,7 +146,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		listT.setFillsViewportHeight(true);
 		
 		tableP = new JScrollPane(listT);
-		tableP.setPreferredSize(new Dimension(20,200));
+		tableP.setPreferredSize(new Dimension(100,200));
 		
 		//Sort Panel
 		sortL = new JLabel("Sort By: ");
@@ -151,8 +168,8 @@ public class MainMenu extends JFrame implements ActionListener {
 		sortP.add(sortL);
 		sortP.add(typeB);
 		sortP.add(priceB);
-		sortP.add(discountB);
 		sortP.add(quantityB);
+		sortP.add(discountB);
 		sortP.add(locationB);
 		sortP.add(vendorB);
 		
@@ -164,7 +181,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	   
 		//Set super Frame properties
 	    master.setTitle("Flower shop IMS Main Menu");  // "super" Frame sets its title
-	    master.setSize(1100, 500);        // "super" Frame sets its initial window size
+	    master.setSize(1100, 450);        // "super" Frame sets its initial window size
 	    master.setResizable(false);
 	    
 	    master.setVisible(true);         // "super" Frame shows
@@ -173,7 +190,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	    }
 	
 		public JTable createTable(ArrayList<ListElement> arrayList) {
-			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","Vendor","Quantity","Discount"};
+			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","VendorID","Quantity","Discount"};
 			tableModel = new DefaultTableModel(colNames,0);
 			JTable table = new JTable(tableModel);
 			
@@ -205,19 +222,86 @@ public class MainMenu extends JFrame implements ActionListener {
 	 
 	   // ActionEvent handler - Called back upon button-click.
 	   public void actionPerformed(ActionEvent e) {
+		   ListOperations listOp = new ListOperations();
 		   if(e.getSource() == allB) {
-			   listT = createTable(ListOperations.flowerShopImsList);
-			   listT.setFillsViewportHeight(true);
+			   productListP.revalidate();
+			   productListP.repaint();
 		   }
 		   
-		   if(e.getSource() == vendorB) {
+		   else if(e.getSource() == typeB) {
 			   
 		   }
 		   
-		   if(e.getSource() == typeB) {
+		   else if(e.getSource() == priceB) {
 			   
+		   }
+		   
+		   else if(e.getSource() == quantityB) {
+			   
+		   }
+		   
+		   else if(e.getSource() == discountB) {
+			   
+		   }
+		   
+		   else if(e.getSource() == locationB) {
+			   
+		   }
+		   
+		   else if(e.getSource() == vendorB) {
+			   
+		   }
+		   
+		   else if(e.getSource() == addB) {
+			   String id = idTF.getText();
+			   String name = nameTF.getText();
+			   String type = typeTF.getText();
+			   String price = priceTF.getText();
+			   String location = locationTF.getText();
+			   String vendor = vendorTF.getText();
+			   String quantity = quantityTF.getText();
+			   String discount = discountTF.getText();
+			   
+			   int idInt = Integer.parseInt(id);
+			   int vendorInt = Integer.parseInt(vendor);
+			   int quantityInt = Integer.parseInt(quantity);
+			   double priceDouble = Double.parseDouble(price);
+			   boolean discountBoolean = Boolean.parseBoolean(discount);
+			   
+			   listOp.push(idInt, name, type, priceDouble, location, vendorInt, quantityInt, discountBoolean);
+			   
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());
+			   
+			   productListP.revalidate();
+			   productListP.repaint();
+		   }
+		   
+		   else if(e.getSource() == updateB) {
+			   String id = idTF.getText();
+			   String name = nameTF.getText();
+			   String type = typeTF.getText();
+			   String price = priceTF.getText();
+			   String location = locationTF.getText();
+			   String vendor = vendorTF.getText();
+			   String quantity = quantityTF.getText();
+			   String discount = discountTF.getText();
+			   
+			   int idInt = Integer.parseInt(id);
+			   int vendorInt = Integer.parseInt(vendor);
+			   int quantityInt = Integer.parseInt(quantity);
+			   double priceDouble = Double.parseDouble(price);
+			   boolean discountBoolean = Boolean.parseBoolean(discount);
+			   
+			   listOp.update(idInt, name, type, priceDouble, location, vendorInt, quantityInt, discountBoolean);
+			   
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());
+			   
+			   productListP.revalidate();
+			   productListP.repaint();
 		   }
 	   }
-
-	
 }

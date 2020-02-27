@@ -16,7 +16,7 @@ public class ListOperations extends ListElement{
 	
 	public static ArrayList<ListElement> flowerShopImsList = new ArrayList<ListElement>();
 	int arraySize=0;
-	MainMenu mainMenuObj =new MainMenu();
+	MainMenu mainMenuObj = new MainMenu();
 	ListElement element1= new ListElement(); 
 	
 	 //Pushes into the list from the rear.
@@ -73,7 +73,7 @@ public class ListOperations extends ListElement{
                 itr.remove(); 
         } 
 		
-		mainMenuObj.displayListInFrame(flowerShopImsList);
+		//mainMenuObj.displayListInFrame(flowerShopImsList);
 		
 		}
 	
