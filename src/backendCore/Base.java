@@ -32,7 +32,7 @@ public static void main(String args[]) {
     listoperation.displayFullList();
     
     MainMenu app =new MainMenu();
-    listoperation.displayListInFrame();
+    app.displayListInFrame(ListOperations.flowerShopImsList);
    
 	}
 

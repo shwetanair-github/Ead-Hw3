@@ -9,7 +9,6 @@ package backendCore;
 
 public class ListElement {
 	
-	
 	public int ProductID, VendorID, QuantityOnHand;
 	public String ProductName, ProductType, Location;
 	public double SalePrice;

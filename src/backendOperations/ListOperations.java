@@ -15,11 +15,10 @@ import backendCore.ListElement;
 public class ListOperations extends ListElement{
 	
 	public static ArrayList<ListElement> flowerShopImsList = new ArrayList<ListElement>();
-	int arraySize=0;
-	MainMenu mainMenuObj = new MainMenu();
+	int arraySize;
 	ListElement element1= new ListElement(); 
 	
-	 //Pushes into the list from the rear.
+	//Pushes into the list from the rear.
 	public void push(int ProductID,String ProductName,String ProductType, double SalePrice,String Location,int VendorID,int QuantityOnHand,boolean Discount) {
 		  ListElement element= new ListElement(); 
 		    element.setProductID(ProductID);
@@ -37,7 +36,7 @@ public class ListOperations extends ListElement{
 		    
 		    //Else adds to the rear of list.
 		    else {
-		    	arraySize++;
+		    	arraySize = flowerShopImsList.size();
 		    	flowerShopImsList.add(arraySize, element);
 		    }  
 	}
@@ -58,11 +57,6 @@ public class ListOperations extends ListElement{
 			}
 	}
 	
-	//Displays the list elements
-	public void displayListInFrame() {
-	mainMenuObj.displayListInFrame(flowerShopImsList);
-	}
-	
 	//Function to remove an element
 	public void remove(int i) {
 		Iterator itr = flowerShopImsList.iterator(); 
@@ -72,10 +66,7 @@ public class ListOperations extends ListElement{
             if (i==element1.getProductID()) 
                 itr.remove(); 
         } 
-		
-		//mainMenuObj.displayListInFrame(flowerShopImsList);
-		
-		}
+	}
 	
 	//Function to update a product
 	public void update(int ProductID,String ProductName,String ProductType,double SalePrice, String Location,int VendorID,int QuantityOnHand,boolean Discount) {
@@ -96,7 +87,6 @@ public class ListOperations extends ListElement{
 	    element.setVendorID(VendorID);
 	    element.setQuantityOnHand(QuantityOnHand);
 	    element.setDiscount(Discount);
-	    flowerShopImsList.add(element);
-		mainMenuObj.displayListInFrame(flowerShopImsList);
+	    flowerShopImsList.add((ProductID - 1), element);
 		}
 }
