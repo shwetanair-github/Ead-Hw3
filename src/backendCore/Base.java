@@ -15,7 +15,7 @@ public static void main(String args[]) {
 	
     ListOperations listoperation =new ListOperations();
 
-    
+    //Product data
     listoperation.push( 1, "lily", "flower", 1.99, "Chicago", "ChiVendor", 134, false);
     listoperation.push(2, "lily seeds", "seeds", 0.99, "Chicago", "ChiVendor", 104, false);
     listoperation.push(3, "rose", "flower", 3.96, "Warrenville", "ChiVendor", 213, false);

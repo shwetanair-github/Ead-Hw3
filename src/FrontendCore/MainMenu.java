@@ -44,7 +44,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		//Panel for title
 		titleP = new JPanel();
-		titleP.setBackground(Color.green);    //Sets title panel's background color
+		titleP.setBackground(Color.pink);    //Sets title panel's background color
 		titleL = new JLabel("Flower Shop IMS");   //Set title text
 		titleL.setAlignmentX(JLabel.CENTER_ALIGNMENT);  //Aligns the title to the center
 		titleL.setFont(titleL.getFont().deriveFont(50.0f));  //Change font size
