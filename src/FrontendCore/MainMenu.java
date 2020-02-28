@@ -231,7 +231,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	            System.out.println(" list :- " + productInfo);
+	          //  System.out.println(" list :- " + productInfo);
 	            listToDisplay.add(productInfo);
 		   	}
 		}
@@ -247,31 +247,76 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Product Type Button - calls the sort function to sort by type
 		   else if(e.getSource() == typeB) {
+			   listOp.sortby("type");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 		   }
 		   
 		   //Price Button - calls the sort function to sort by price
 		   else if(e.getSource() == priceB) {
+			   listOp.sortby("price");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 		   }
 		   
 		   //Quantity Button - calls the sort function to sort by quantity
 		   else if(e.getSource() == quantityB) {
+			   listOp.sortby("quantity");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
+			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 			   
 		   }
 		   
 		   //Discount Button - calls the sort function to show discounted products
 		   else if(e.getSource() == discountB) {
+			   listOp.sortby("discount");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
+			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 			   
 		   }
 		   
 		   //Location Button - calls the sort function to sort by location
 		   else if(e.getSource() == locationB) {
+			   listOp.sortby("location");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 		   }
 		   
 		   //Vendor Button - calls the sort function to sort by vendor
 		   else if(e.getSource() == vendorB) {
+			   listOp.sortby("vendor");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
+			   
+			   //Refreshes the table
+			   productListP.revalidate();
+			   productListP.repaint();
 			   
 		   }
 		   
