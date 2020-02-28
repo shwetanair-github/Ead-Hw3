@@ -205,7 +205,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		//Function to create a table holding all products & their properties
 		public JTable createTable(ArrayList<ListElement> arrayList) {
-			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","VendorID","Quantity","Discount"};  //column names
+			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","Vendor","Quantity","Discount"};  //column names
 			tableModel = new DefaultTableModel(colNames,0);  //initialize the table model
 			JTable table = new JTable(tableModel);  //initialize the table
 			
@@ -216,11 +216,11 @@ public class MainMenu extends JFrame implements ActionListener {
 				String type = obj.getProductType();
 				double price = obj.getSalePrice();
 				String location = obj.getLocation();
-				String vendorID = obj.getVendorID();
+				String vendor = obj.getVendorID();
 				int quantity = obj.getQuantityOnHand();
 				boolean discount = obj.getDiscount();
 				
-				Object[] product = {id, name, type, price, location, vendorID, quantity, discount}; //Add product properties to an object array
+				Object[] product = {id, name, type, price, location, vendor, quantity, discount}; //Add product properties to an object array
 				tableModel.addRow(product);   //Create table row containing product data
 			}
 			return table;
@@ -335,7 +335,6 @@ public class MainMenu extends JFrame implements ActionListener {
 			   //Refreshes the table
 			   productListP.revalidate();
 			   productListP.repaint();
-			   
 		   }
 		   
 		   //Add Product Button - adds a product listing to the table
