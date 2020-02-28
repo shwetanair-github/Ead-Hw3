@@ -115,6 +115,9 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 		if(sortby.equals("quantity")) {
 			Collections.sort(tempList,qtyComparator);
 		}
+		if(sortby.equals("discount")) {
+			Collections.sort(tempList,discountComparator);
+		}
 		if(sortby.equals("location")) {
 			Collections.sort(tempList,locationComparator);
 		}

@@ -362,6 +362,16 @@ public class MainMenu extends JFrame implements ActionListener {
 			   newT = createTable(listOp.flowerShopImsList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
+			   //Clears the text fields
+			   idTF.setText("");
+			   nameTF.setText("");
+			   typeTF.setText("");
+			   priceTF.setText("");
+			   locationTF.setText("");
+			   vendorTF.setText("");
+			   quantityTF.setText("");
+			   discountTF.setText("");
+			   
 			   //Refreshes the table
 			   productListP.revalidate();
 			   productListP.repaint();
@@ -387,6 +397,16 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Calls the update function to update the product's properties
 			   listOp.update(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
+			   
+			   //Clears the text fields
+			   idTF.setText("");
+			   nameTF.setText("");
+			   typeTF.setText("");
+			   priceTF.setText("");
+			   locationTF.setText("");
+			   vendorTF.setText("");
+			   quantityTF.setText("");
+			   discountTF.setText("");
 			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
