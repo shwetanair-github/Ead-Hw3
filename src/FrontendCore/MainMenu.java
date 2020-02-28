@@ -139,7 +139,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		allB.addActionListener(this);     //Add actionlistener to "View All" button
 		
 		searchTF = new JTextField();  //Initialize search textfield
-		searchHint = new JLabel("Enter product property to search");   //create a hint for the search text field
+		searchHint = new JLabel("Enter product ID, name, type, location, vendor, or discount to search ");   //create a hint for the search text field
 		searchB = new JButton("Search");  //Initialize search button
 		searchB.addActionListener(this);
 		
@@ -297,12 +297,11 @@ public class MainMenu extends JFrame implements ActionListener {
 			   //Refreshes the table
 			   productListP.revalidate();
 			   productListP.repaint();
-			   
 		   }
 		   
-		   //Discount Button - calls the sort function to show discounted products
+		   //Discount Button - calls the search function to show discounted products
 		   else if(e.getSource() == discountB) {
-			   tempList=listOp.sortby("discount");
+			   tempList=listOp.searchby("true");
 			   JTable newT = new JTable(tableModel);
 			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
