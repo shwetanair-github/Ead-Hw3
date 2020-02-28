@@ -65,14 +65,20 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 	}
 	
 	//Function to remove an element
-	public void remove(int i) {
+	public int remove(int i) {
+		int flag=0;
 		Iterator itr = flowerShopImsList.iterator(); 
         while (itr.hasNext()) 
         { 
             element1 = (ListElement)itr.next(); 
-            if (i==element1.getProductID()) 
+            if (i==element1.getProductID()) {
                 itr.remove(); 
+            	flag=1;}
         } 
+        if (flag==0) {
+        	return flag;
+        }
+        return i;
 	}
 	
 	//Function to update a product
