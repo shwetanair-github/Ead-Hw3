@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import FrontendCore.MainMenu;
 import backendCore.ListElement;
@@ -24,7 +26,7 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 	 
 	
 	//Pushes into the list from the rear.
-	public void push(int ProductID,String ProductName,String ProductType, double SalePrice,String Location,int VendorID,int QuantityOnHand,boolean Discount) {
+	public void push(int ProductID,String ProductName,String ProductType, double SalePrice,String Location,String VendorID,int QuantityOnHand,boolean Discount) {
 		ListElement element= new ListElement(); 
 		    element.setProductID(ProductID);
 		    element.setProductName(ProductName);
@@ -74,7 +76,7 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 	}
 	
 	//Function to update a product
-	public void update(int ProductID,String ProductName,String ProductType,double SalePrice, String Location,int VendorID,int QuantityOnHand,boolean Discount) {
+	public void update(int ProductID,String ProductName,String ProductType,double SalePrice, String Location,String VendorID,int QuantityOnHand,boolean Discount) {
 		Iterator itr = flowerShopImsList.iterator(); 
         while (itr.hasNext()) 
         { 
@@ -95,30 +97,50 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 	    flowerShopImsList.add((ProductID - 1), element);
 		}
 	
-	public void sortby(String sortby) {
+	// Function that decides what sorting function to apply
+	public ArrayList<ListElement> sortby(String sortby) {
 		
+		 ArrayList<ListElement> tempList = new ArrayList<ListElement>();
+		   tempList=flowerShopImsList;
+		   
+		if(sortby.equals("id")) {
+			Collections.sort(tempList,idComparator);
+		}
 		if(sortby.equals("price")) {
-			Collections.sort(flowerShopImsList,priceComparator);
+			Collections.sort(tempList,priceComparator);
 		}
 		if(sortby.equals("type")) {
-			Collections.sort(flowerShopImsList,typeComparator);
+			Collections.sort(tempList,typeComparator);
 		}
 		if(sortby.equals("quantity")) {
-			Collections.sort(flowerShopImsList,qtyComparator);
+			Collections.sort(tempList,qtyComparator);
 		}
 		if(sortby.equals("discount")) {
-			Collections.sort(flowerShopImsList,discountComparator);
+			Collections.sort(tempList,discountComparator);
 		}
 		if(sortby.equals("location")) {
-			Collections.sort(flowerShopImsList,locationComparator);
+			Collections.sort(tempList,locationComparator);
 		}
 		if(sortby.equals("vendor")) {
-			Collections.sort(flowerShopImsList,vendorComparator);
+			Collections.sort(tempList,vendorComparator);
 		}
+		return tempList;
 	}
 	
-
-
+		// ID comparator
+	 	public static Comparator<ListElement> idComparator = new Comparator<ListElement>() {
+	
+		 @Override
+		 public int compare(ListElement s1, ListElement s2) {
+		    Integer id1 = s1.getProductID();
+		    Integer id2 = s2.getProductID();
+	
+		    //ascending order
+		    return id1.compareTo(id2);
+	
+		    }};
+	
+		// Price comparator
 	 	public static Comparator<ListElement> priceComparator = new Comparator<ListElement>() {
 
 		 @Override
@@ -132,7 +154,7 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 		    }};
 
 
-	
+		 // Type comparator
 		 public static Comparator<ListElement> typeComparator = new Comparator<ListElement>() {
 
 		@Override
@@ -145,7 +167,7 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 
 		    }};
 		
-
+		// Quantity comparator
 		public static Comparator<ListElement> qtyComparator = new Comparator<ListElement>() {
 
 		@Override
@@ -157,7 +179,8 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 		    return qty1.compareTo(qty2);
 
 		    }};    
-				    
+			
+		// Discount comparator    
 		public static Comparator<ListElement> discountComparator = new Comparator<ListElement>() {
 
 		@Override
@@ -170,18 +193,20 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 
 		    }}; 
 		    
+		 // Vendor comparator
 		 public static Comparator<ListElement> vendorComparator = new Comparator<ListElement>() {
 
 		@Override
 		public int compare(ListElement s1, ListElement s2) {
-		    Integer vend1 = s1.getVendorID();
-		    Integer vend2 = s2.getVendorID();
+			String vend1 = s1.getVendorID();
+			String vend2 = s2.getVendorID();
 
 		    //ascending order
 		    return vend1.compareTo(vend2);
 
 		    }}; 
 		    
+		// Location comparator    
 		public static Comparator<ListElement> locationComparator = new Comparator<ListElement>() {
 
 		@Override
@@ -200,6 +225,64 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 				return 0;
 			}
 	 
+		// function to search by either product name or product ID
+	   public ArrayList<ListElement> searchby(String searchText) {
+		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
+		   tempList=flowerShopImsList;
+		   String regex = "[+-]?[0-9][0-9]*"; 
+	          
+	        // compiling regex 
+	        Pattern p = Pattern.compile(regex); 
+	          
+	        // Creates a matcher that will match input against regex 
+	        Matcher m = p.matcher(searchText); 
+	          
+	        // If match found and equal to input1 
+	        if(m.find() && m.group().equals(searchText)) {
+	            System.out.println(searchText + " is a valid integer number"); 
+	            tempList=searchByIntegerAttributes(Integer.parseInt(searchText));
+			   
+		   }
+	        
+	        else {
+	        	tempList=searchByProductTextAttributes(searchText);
+	        }
+		   
+		   return tempList;
+	   }
 	   
+	   // Function that searches by product name
+	   public ArrayList<ListElement>  searchByProductTextAttributes(String searchtext) {
+		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
+		   for (ListElement p1:flowerShopImsList) {
+			   if (p1.getProductName().equalsIgnoreCase(searchtext)||
+					   p1.getVendorID().equalsIgnoreCase(searchtext)||
+					   p1.getProductType().equalsIgnoreCase(searchtext)||
+					   p1.getLocation().equalsIgnoreCase(searchtext)||
+					   Boolean.toString(p1.getDiscount()).equalsIgnoreCase(searchtext)
+					   ) {
+				   if(tempList.isEmpty())
+					   tempList.add(0, p1);
+					    //Else adds to the rear of list.
+					    else {
+					    	arraySize = tempList.size();
+					    	tempList.add(arraySize, p1);
+					    }  
+			   }
+			 
+		   }
+		   return tempList;
+	   }
+	   
+	   // Function that searches by product ID
+	   public ArrayList<ListElement>  searchByIntegerAttributes(int productId) {
+		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
+		   for (ListElement p1:flowerShopImsList) {
+			   if (p1.getProductID()==productId) {
+				   tempList.add(0, p1);
+			   }
+		   }
+		   return tempList;
+	   }
 	
 }

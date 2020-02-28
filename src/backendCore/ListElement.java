@@ -9,8 +9,8 @@ package backendCore;
 
 public class ListElement {
 	
-	public int ProductID, VendorID, QuantityOnHand;
-	public String ProductName, ProductType, Location;
+	public int ProductID, QuantityOnHand;
+	public String ProductName, ProductType, Location,VendorID;
 	public double SalePrice;
 	public boolean Discount;
 	
@@ -21,7 +21,7 @@ public class ListElement {
 		ProductType = null;
 		SalePrice = 0;
 		Location = null;
-		VendorID = 0;
+		VendorID = null;
 		QuantityOnHand = 0;
 		Discount = false;
 	}
@@ -42,7 +42,7 @@ public class ListElement {
 	public void setLocation(String location) {
 		this.Location = location;
 	}
-	public void setVendorID(int vendorID) {
+	public void setVendorID(String vendorID) {
 		this.VendorID = vendorID;
 	}
 	public void setQuantityOnHand(int quantityOnHand) {
@@ -68,7 +68,7 @@ public class ListElement {
 	public String getLocation() {
 		return this.Location;
 	}
-	public int getVendorID() {
+	public String getVendorID() {
 		return this.VendorID;
 	}
 	public int getQuantityOnHand() {

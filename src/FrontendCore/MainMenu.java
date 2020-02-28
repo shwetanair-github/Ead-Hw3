@@ -142,6 +142,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		searchTF = new JTextField();  //Initialize search textfield
 		searchHint = new JLabel("Input product ID or product name to search");   //create a hint for the search text field
 		searchB = new JButton("Search");  //Initialize search button
+		searchB.addActionListener(this);
 		
 		//Add components to the appropriate search panels
 		searchTextFieldP.add(searchHint);
@@ -156,7 +157,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		listT.setFillsViewportHeight(true);   //set table height
 		
 		tableP = new JScrollPane(listT);
-		tableP.setPreferredSize(new Dimension(100,200));  //sets size of table panel
+		tableP.setPreferredSize(new Dimension(110,200));  //sets size of table panel
 		
 		//Sort Panel
 		//Initialize components
@@ -216,7 +217,7 @@ public class MainMenu extends JFrame implements ActionListener {
 				String type = obj.getProductType();
 				double price = obj.getSalePrice();
 				String location = obj.getLocation();
-				int vendorID = obj.getVendorID();
+				String vendorID = obj.getVendorID();
 				int quantity = obj.getQuantityOnHand();
 				boolean discount = obj.getDiscount();
 				
@@ -239,17 +240,35 @@ public class MainMenu extends JFrame implements ActionListener {
 	   // ActionEvent handler - Called back upon button-click.
 	   public void actionPerformed(ActionEvent e) {
 		   ListOperations listOp = new ListOperations();
+		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
+			   tempList=listOp.sortby("id");
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(listOp.flowerShopImsList);
+			   listT.setModel(newT.getModel());  
+			   productListP.revalidate();
+			   productListP.repaint();
+		   }
+		   
+		   // Search button searches for the items based on the input in the text field
+		   else if(e.getSource() == searchB) {
+		
+			   tempList=listOp.searchby(searchTF.getText());
+			   JTable newT = new JTable(tableModel);
+			   newT = createTable(tempList);
+			   listT.setModel(newT.getModel());  //replace table with updated table
+			   
+			   //Refreshes the table
 			   productListP.revalidate();
 			   productListP.repaint();
 		   }
 		   
 		   //Product Type Button - calls the sort function to sort by type
 		   else if(e.getSource() == typeB) {
-			   listOp.sortby("type");
+			   tempList=listOp.sortby("type");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -259,9 +278,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Price Button - calls the sort function to sort by price
 		   else if(e.getSource() == priceB) {
-			   listOp.sortby("price");
+			   tempList=listOp.sortby("price");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -271,9 +290,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Quantity Button - calls the sort function to sort by quantity
 		   else if(e.getSource() == quantityB) {
-			   listOp.sortby("quantity");
+			   tempList=listOp.sortby("quantity");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -284,9 +303,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Discount Button - calls the sort function to show discounted products
 		   else if(e.getSource() == discountB) {
-			   listOp.sortby("discount");
+			   tempList=listOp.sortby("discount");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -297,9 +316,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Location Button - calls the sort function to sort by location
 		   else if(e.getSource() == locationB) {
-			   listOp.sortby("location");
+			   tempList=listOp.sortby("location");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -309,9 +328,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Vendor Button - calls the sort function to sort by vendor
 		   else if(e.getSource() == vendorB) {
-			   listOp.sortby("vendor");
+			   tempList=listOp.sortby("vendor");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
 			   
 			   //Refreshes the table
@@ -334,13 +353,12 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Convert properties that need to be a different data type
 			   int idInt = Integer.parseInt(id);
-			   int vendorInt = Integer.parseInt(vendor);
 			   int quantityInt = Integer.parseInt(quantity);
 			   double priceDouble = Double.parseDouble(price);
 			   boolean discountBoolean = Boolean.parseBoolean(discount);
 			   
 			   //Call the push function to add product to the table
-			   listOp.push(idInt, name, type, priceDouble, location, vendorInt, quantityInt, discountBoolean);
+			   listOp.push(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
 			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
@@ -366,13 +384,12 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Convert properties that need to be a different data type 
 			   int idInt = Integer.parseInt(id);
-			   int vendorInt = Integer.parseInt(vendor);
 			   int quantityInt = Integer.parseInt(quantity);
 			   double priceDouble = Double.parseDouble(price);
 			   boolean discountBoolean = Boolean.parseBoolean(discount);
 			   
 			   //Calls the update function to update the product's properties
-			   listOp.update(idInt, name, type, priceDouble, location, vendorInt, quantityInt, discountBoolean);
+			   listOp.update(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
 			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
