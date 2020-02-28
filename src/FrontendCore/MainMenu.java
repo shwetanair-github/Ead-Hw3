@@ -29,7 +29,6 @@ public class MainMenu extends JFrame implements ActionListener {
 	
 	//Declare strings
 	private String productInfo;
-	private String removeString;
 	private ArrayList<String> listToDisplay = new ArrayList<String>();  
 	
 	//Declare table
@@ -73,7 +72,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		priceL = new JLabel("Price");
 		quantityL = new JLabel("Quantity on Hand");
 		locationL = new JLabel("Location");
-		vendorL = new JLabel("VendorID");
+		vendorL = new JLabel("Vendor");
 		discountL = new JLabel("Discount (True/False)");
 		
 		//Initialize edit panel text fields
@@ -140,7 +139,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		allB.addActionListener(this);     //Add actionlistener to "View All" button
 		
 		searchTF = new JTextField();  //Initialize search textfield
-		searchHint = new JLabel("Input product ID or product name to search");   //create a hint for the search text field
+		searchHint = new JLabel("Enter product property to search");   //create a hint for the search text field
 		searchB = new JButton("Search");  //Initialize search button
 		searchB.addActionListener(this);
 		
@@ -251,7 +250,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			   productListP.repaint();
 		   }
 		   
-		   // Search button searches for the items based on the input in the text field
+		   //Search button searches for the items based on the input in the text field
 		   else if(e.getSource() == searchB) {
 		
 			   tempList=listOp.searchby(searchTF.getText());
@@ -395,8 +394,6 @@ public class MainMenu extends JFrame implements ActionListener {
 			   JTable newT = new JTable(tableModel);
 			   newT = createTable(listOp.flowerShopImsList);
 			   listT.setModel(newT.getModel());   //replace table with updated table
-			   
-
 		   }
 		   
 		   //Remove Product Button - removes a product listing from the table
