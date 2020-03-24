@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import backendCore.DatabaseConnection;
 import backendCore.ListElement;
 import backendOperations.ListOperations;
 
@@ -34,6 +35,8 @@ public class MainMenu extends JFrame implements ActionListener {
 	//Declare table
 	private DefaultTableModel tableModel;
 	private JTable listT;
+	//Database object
+	DatabaseConnection dbObject= new DatabaseConnection();
 	
 	// Constructor to setup GUI components and event handlers
 	public MainMenu () {
@@ -356,9 +359,9 @@ public class MainMenu extends JFrame implements ActionListener {
 			   boolean discountBoolean = Boolean.parseBoolean(discount);
 			   
 			   //Call the push function to add product to the table
-			   listOp.push(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
+			   dbObject.insertIntoTable( name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
 			   }
-			   catch(NumberFormatException e1) {
+			   catch(Exception e1) {
 					JOptionPane.showMessageDialog(master, "No product added. Please use correct data format for input.");  
 					}
 			   
