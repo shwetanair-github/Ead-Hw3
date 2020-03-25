@@ -16,13 +16,14 @@ public class DatabaseConnection {
 	ResultSet resultset;
 	DatabaseMetaData  databasetMetaData;
 	ResultSetMetaData resultsetMetaData;
-	ListOperations listoperation =new ListOperations();
+	ListOperations listoperation;
 
+	
 
 	
 	//Creating the database connection to a Mysql database
-	public  void connectDBConnection() {
-		
+	public  DatabaseConnection() {
+		 listoperation =new ListOperations();
 		try{  
 			Class.forName("com.mysql.cj.jdbc.Driver");  
 			connection=DriverManager.getConnection(  
@@ -33,6 +34,31 @@ public class DatabaseConnection {
 		catch(Exception e)
 		{ System.out.println(e);}  
 	}
+	
+	// Updating the array list
+	public void updateList() {
+		try{  
+			
+			statement=connection.createStatement();  
+			resultset=statement.executeQuery("select * from IMS_manager");  
+			while(resultset.next())  {
+				listoperation.push( resultset.getInt(1),
+						resultset.getString(2),
+						resultset.getString(3),
+						resultset.getDouble(4),
+						resultset.getString(5),
+						resultset.getString(6),
+						resultset.getInt(7),
+						resultset.getBoolean(8));
+						
+				
+				}
+			
+			}
+		catch(Exception e)
+		{ System.out.println(e);}  
+	}
+	
 
 	//Closing the Database connection
 	public void closeDBConnection() {
@@ -83,10 +109,13 @@ public class DatabaseConnection {
 						+VendorID+"',"
 						+QuantityOnHand+","
 						+Discount+")"
+						
 				);  
 				resultset=statement.executeQuery("select max(ProductID) from IMS_manager");  
 				while(resultset.next())  {
+					
 				listoperation.push( resultset.getInt(1), ProductName, ProductType, SalePrice, Location, VendorID, QuantityOnHand, Discount);
+				
 				}
 				
 			}
@@ -106,7 +135,7 @@ public class DatabaseConnection {
 			try{  
 			
 			statement=connection.createStatement();  
-			statement.executeUpdate("insert into IMS_manager values (null,'"
+			statement.executeUpdate("update IMS_manager set'"
 			+ProductName+"','"
 			+ProductType+"',"
 			+SalePrice+",'"

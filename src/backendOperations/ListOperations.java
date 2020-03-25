@@ -20,10 +20,11 @@ import backendCore.ListElement;
 
 public class ListOperations extends ListElement implements Comparator<ListElement>{
 	
-	public static ArrayList<ListElement> flowerShopImsList = new ArrayList<ListElement>();
-	int arraySize;
+	public static ArrayList<ListElement> flowerShopImsList=new ArrayList<ListElement>();
 	ListElement element1= new ListElement(); 
-	 
+	int arraySize;
+	
+	
 	
 	//Pushes into the list from the rear.
 	public void push(int ProductID,String ProductName,String ProductType, double SalePrice,String Location,String VendorID,int QuantityOnHand,boolean Discount) {
@@ -37,19 +38,13 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 		    element.setQuantityOnHand(QuantityOnHand);
 		    element.setDiscount(Discount);
 		    
-		    //Add element at 0 index if the list is empty.
-		    if(flowerShopImsList.isEmpty())
-		    flowerShopImsList.add(0, element);
-		    
-		    //Else adds to the rear of list.
-		    else {
-		    	arraySize = flowerShopImsList.size();
-		    	flowerShopImsList.add(arraySize, element);
-		    }  
+		    flowerShopImsList.add(element);
+		   
+		 
 	}
 	
 	//Displays the list elements
-	public void displayFullList() {
+	public static void displayFullList() {
 		 System.out.println("The IMS list size: "+flowerShopImsList.size());
 		for (Object obj : flowerShopImsList) {   
             ListElement node = (ListElement) obj;
@@ -104,7 +99,7 @@ public class ListOperations extends ListElement implements Comparator<ListElemen
 		}
 	
 	// Function that decides what sorting function to apply
-	public ArrayList<ListElement> sortby(String sortby) {
+	public static ArrayList<ListElement> sortby(String sortby) {
 		
 		 ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   tempList=flowerShopImsList;

@@ -234,7 +234,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	          //  System.out.println(" list :- " + productInfo);
+	            System.out.println(" list in frame:- " + productInfo);
 	            listToDisplay.add(productInfo);
 		   	}
 		}
@@ -245,9 +245,9 @@ public class MainMenu extends JFrame implements ActionListener {
 		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
-			   tempList=listOp.sortby("id");
+			   tempList=ListOperations.sortby("id");
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(ListOperations.flowerShopImsList);
 			   listT.setModel(newT.getModel());  
 			   productListP.revalidate();
 			   productListP.repaint();
@@ -367,9 +367,9 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(ListOperations.flowerShopImsList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
-			   JOptionPane.showMessageDialog(master, "Product ID:"+id+" added!");  
+			   JOptionPane.showMessageDialog(master, "Product:"+name+" added!");  
 			   //Clears the text fields
 			   idTF.setText("");
 			   nameTF.setText("");

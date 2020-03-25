@@ -13,7 +13,7 @@ public class Base {
 public static void main(String args[]) {
 	
     DatabaseConnection dbObject= new DatabaseConnection();
-    dbObject.connectDBConnection();
+    dbObject.updateList();
     dbObject.insertIntoTable("lily", "flower", 1.99, "Chicago", "ChiVendor", 134, false);
     dbObject.insertIntoTable( "lily seeds", "seeds", 0.99, "Chicago", "ChiVendor", 104, false);
     dbObject.insertIntoTable( "rose", "flower", 3.96, "Warrenville", "ChiVendor", 213, false);
