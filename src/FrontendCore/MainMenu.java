@@ -234,7 +234,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	            System.out.println(" list in frame:- " + productInfo);
+	            
 	            listToDisplay.add(productInfo);
 		   	}
 		}
@@ -245,7 +245,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
-			   tempList=ListOperations.sortby("id");
+			   tempList=listOp.sortby("id");
 			   JTable newT = new JTable(tableModel);
 			   newT = createTable(ListOperations.flowerShopImsList);
 			   listT.setModel(newT.getModel());  
@@ -342,7 +342,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   //Add Product Button - adds a product listing to the table
 		   else if(e.getSource() == addB) {
 			   //Get the edit form's inputs
-			   String id = idTF.getText();
+			   //String id = idTF.getText(); Removing ID input as the database will assign a ID to it.
 			   String name = nameTF.getText();
 			   String type = typeTF.getText();
 			   String price = priceTF.getText();
@@ -353,18 +353,13 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Convert properties that need to be a different data type
 			   try {
-			   int idInt = Integer.parseInt(id);
+			 //  int idInt = Integer.parseInt(id);
 			   int quantityInt = Integer.parseInt(quantity);
 			   double priceDouble = Double.parseDouble(price);
 			   boolean discountBoolean = Boolean.parseBoolean(discount);
 			   
-			   //Call the push function to add product to the table
+			   //Call the add to DB function to add product to the table and to push to arraylist
 			   dbObject.insertIntoTable( name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
-			   }
-			   catch(Exception e1) {
-					JOptionPane.showMessageDialog(master, "No product added. Please use correct data format for input.");  
-					}
-			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
 			   newT = createTable(ListOperations.flowerShopImsList);
@@ -383,6 +378,12 @@ public class MainMenu extends JFrame implements ActionListener {
 			   //Refreshes the table
 			   productListP.revalidate();
 			   productListP.repaint();
+			   }
+			   catch(Exception e1) {
+					JOptionPane.showMessageDialog(master, "No product added. Please use correct data format for input.");  
+					}
+			   
+			 
 		   }
 		   
 		   //Update Product Button - updates a product listing in the table
@@ -404,14 +405,10 @@ public class MainMenu extends JFrame implements ActionListener {
 			   double priceDouble = Double.parseDouble(price);
 			   boolean discountBoolean = Boolean.parseBoolean(discount);
 			   
-			   //Calls the update function to update the product's properties
-			   listOp.update(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
-			   }
-			   catch(NumberFormatException e1) {
-				JOptionPane.showMessageDialog(master, "No product updated. Please use correct data format for input.");  
-				}
+			   //Calls the update function to update the product's properties in the database
+			   dbObject.updateTable(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
 			   
-			   //Display updated message.
+			 //Display updated message.
 			   JOptionPane.showMessageDialog(master, "Product ID:"+id+" updated!");  
 				
 			   //Clears the text fields
@@ -426,8 +423,14 @@ public class MainMenu extends JFrame implements ActionListener {
 			   
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(ListOperations.flowerShopImsList);
 			   listT.setModel(newT.getModel());   //replace table with updated table
+			   }
+			   catch(NumberFormatException e1) {
+				JOptionPane.showMessageDialog(master, "No product updated. Please use correct data format for input.");  
+				}
+			   
+			   
 		   }
 		   
 		   //Remove Product Button - removes a product listing from the table
@@ -438,7 +441,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			   productID = Integer.parseInt(removeText);   //Convert input to an integer
 			   
 			   //Call the remove function to remove the product listing
-			   int flag=listOp.remove(productID);
+			   int flag=dbObject.deleteTable(productID);
 			   if(flag!=0) {
 			   JOptionPane.showMessageDialog(master, "Product ID:"+productID+" removed!"); 
 			   }
@@ -447,7 +450,7 @@ public class MainMenu extends JFrame implements ActionListener {
 			     
 			   //Copy the table and initialize it with the new inventory list
 			   JTable newT = new JTable(tableModel);
-			   newT = createTable(listOp.flowerShopImsList);
+			   newT = createTable(ListOperations.flowerShopImsList);
 			   listT.setModel(newT.getModel());   //replace table with updated table
   
 			   //Refreshes the table
