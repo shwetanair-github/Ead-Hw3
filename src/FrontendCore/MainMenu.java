@@ -1,8 +1,7 @@
 package FrontendCore;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,25 +15,27 @@ public class MainMenu extends JFrame implements ActionListener {
 	JFrame master;
 	
 	//Declare panels
-	private JPanel mainP, titleP, editP, editFormP, editButtonP, productListP, searchP, searchTextFieldP, sortP;
+	JPanel mainP, titleP, editP, editFormP, editButtonP, productListP, searchP, searchTextFieldP, sortP;
+	
 	private JScrollPane tableP;
 	
 	//Declare labels
-	private JLabel titleL, sortL, idL, vendorL, typeL, locationL, priceL, quantityL, nameL, discountL, searchHint, discountHint; 
+	private JLabel titleL, sortL, searchHint;
 	
 	//Declare text field
-	private JTextField searchTF, idTF, vendorTF, typeTF, locationTF, priceTF, quantityTF, nameTF, discountTF;
+	private JTextField searchTF;
 	
 	//Declare buttons
 	private JButton allB, searchB, vendorB, typeB, locationB, priceB, quantityB, discountB, addB, removeB, updateB;
 	
 	//Declare strings
-	private String productInfo;
+	String productInfo;
 	private ArrayList<String> listToDisplay = new ArrayList<String>();  
 	
 	//Declare table
-	private DefaultTableModel tableModel;
-	private JTable listT;
+	DefaultTableModel tableModel;
+	JTable listT;
+	
 	//Database object
 	DatabaseConnection dbObject= new DatabaseConnection();
 	
@@ -55,74 +56,6 @@ public class MainMenu extends JFrame implements ActionListener {
 		titleP.add(titleL);   //Adds title text to title panel
 		master.add(titleP, BorderLayout.PAGE_START);  //Adds title panel to "super" Frame
 		
-		//Edit panel that contains a form to add/update a product and a button to remove a product
-		editP = new JPanel();
-		editFormP = new JPanel();
-		editButtonP = new JPanel();
-		
-		editP.setLayout(new BoxLayout(editP,BoxLayout.Y_AXIS));   //Sets layout to edit panel for all containers in this panel to a vertical alignment
-		editP.setPreferredSize(new Dimension(400,325));  //sets size of the edit panel
-		editFormP.setLayout(new GridLayout(8,2));   //sets a grid layout to the add form
-		
-		editP.setBorder(BorderFactory.createLoweredBevelBorder());   //Sets a bevel border in the add panel
-		editFormP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));   //Creates an empty border for better spacing
-		editButtonP.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
-		//Initialize edit panel labels
-		idL = new JLabel("Product ID");
-		nameL = new JLabel("Name");
-		typeL = new JLabel("Type");
-		priceL = new JLabel("Price");
-		quantityL = new JLabel("Quantity on Hand");
-		locationL = new JLabel("Location");
-		vendorL = new JLabel("Vendor");
-		discountL = new JLabel("Discount (True/False)");
-		
-		//Initialize edit panel text fields
-		idTF = new JTextField(15);
-		nameTF = new JTextField(15);
-		typeTF = new JTextField(15);
-		priceTF = new JTextField(15);
-		quantityTF = new JTextField(15);
-		locationTF = new JTextField(15);
-		vendorTF = new JTextField(15);
-		discountTF = new JTextField(15);
-		
-		//initialize edit panel buttons
-		addB = new JButton("Add Product");
-		updateB = new JButton("Update Product");
-		removeB = new JButton("Remove Product");
-		
-		addB.addActionListener(this);
-		updateB.addActionListener(this);
-		removeB.addActionListener(this);
-
-		//Add components to the edit panel
-		editFormP.add(idL);
-		editFormP.add(idTF);
-		editFormP.add(nameL);
-		editFormP.add(nameTF);
-		editFormP.add(typeL);
-		editFormP.add(typeTF);
-		editFormP.add(priceL);
-		editFormP.add(priceTF);
-		editFormP.add(locationL);
-		editFormP.add(locationTF);
-		editFormP.add(vendorL);
-		editFormP.add(vendorTF);
-		editFormP.add(quantityL);
-		editFormP.add(quantityTF);
-		editFormP.add(discountL);
-		editFormP.add(discountTF);
-		editButtonP.add(addB);
-		editButtonP.add(updateB);
-		editButtonP.add(removeB);
-		editP.add(editFormP);
-		editP.add(editButtonP);
-		
-		//Add edit panel to the main panel
-		mainP.add(editP, BorderLayout.LINE_START);
-
 		//ProductList panel that displays the product inventory
 		productListP = new JPanel();
 		searchP = new JPanel();  //holds the view all button, search text field, and search button
@@ -194,12 +127,46 @@ public class MainMenu extends JFrame implements ActionListener {
 		productListP.add(sortP);
 		
 		//Add the product list panel to the main panel
-		mainP.add(productListP, BorderLayout.LINE_END);
-	   
+		mainP.add(productListP, BorderLayout.LINE_START);
+		
+		//Edit panel that contains a form to add/update a product and a button to remove a product
+		editButtonP = new JPanel();
+		
+		editButtonP.setLayout(new GridLayout(5,1));
+		editButtonP.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+			(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(20,20,20,20)))));
+		
+		//initialize edit panel buttons
+		addB = new JButton("Add Product");
+		updateB = new JButton("Update Product");
+		removeB = new JButton("Remove Product");
+		
+		addB.addActionListener(this);
+		updateB.addActionListener(this);
+		removeB.addActionListener(this);
+		
+		//Add buttons to main panel
+		JLabel invisL = new JLabel(" "); //invisible components to create spacing between buttons
+		JLabel invisL2 = new JLabel(" ");
+		
+		editButtonP.add(addB);
+		editButtonP.add(invisL);
+		editButtonP.add(updateB);
+		editButtonP.add(invisL2);
+		editButtonP.add(removeB);
+		
+		//Center align buttons
+		addB.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		updateB.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		removeB.setAlignmentX(JButton.CENTER_ALIGNMENT);
+
+		//Add button container to main container
+		mainP.add(editButtonP, BorderLayout.LINE_END);
+
 		//Set super Frame properties
 	    master.setTitle("Flower shop IMS Main Menu");  // "super" Frame sets its title
-	    master.setSize(1250, 450);        // "super" Frame sets its initial window size
-	    master.setResizable(false);
+	    master.setSize(1000, 450);        // "super" Frame sets its initial window size
+	    //master.setResizable(false);
 	    
 	    master.setVisible(true);         // "super" Frame shows
 	    master.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
@@ -208,7 +175,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		
 		//Function to create a table holding all products & their properties
 		public JTable createTable(ArrayList<ListElement> arrayList) {
-			String[] colNames = {"Product ID","Product Name","ProductType","Price","Location","Vendor","Quantity","Discount"};  //column names
+			String[] colNames = {"ProductID","ProductName","ProductType","Price","Location","Vendor","QuantityOnHand","Discount"};  //column names
 			tableModel = new DefaultTableModel(colNames,0);  //initialize the table model
 			JTable table = new JTable(tableModel);  //initialize the table
 			
@@ -234,7 +201,7 @@ public class MainMenu extends JFrame implements ActionListener {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	            
+	            System.out.println(" list in frame:- " + productInfo);
 	            listToDisplay.add(productInfo);
 		   	}
 		}
@@ -243,6 +210,8 @@ public class MainMenu extends JFrame implements ActionListener {
 	   public void actionPerformed(ActionEvent e) {
 		   ListOperations listOp = new ListOperations();
 		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
+		   EditForm EF = new EditForm();
+		   
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
 			   tempList=listOp.sortby("id");
@@ -293,6 +262,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   //Quantity Button - calls the sort function to sort by quantity
 		   else if(e.getSource() == quantityB) {
 			   tempList=listOp.sortby("quantity");
+			   tableModel.fireTableDataChanged();
 			   JTable newT = new JTable(tableModel);
 			   newT = createTable(tempList);
 			   listT.setModel(newT.getModel());  //replace table with updated table
@@ -341,124 +311,56 @@ public class MainMenu extends JFrame implements ActionListener {
 		   
 		   //Add Product Button - adds a product listing to the table
 		   else if(e.getSource() == addB) {
-			   //Get the edit form's inputs
-			   //String id = idTF.getText(); Removing ID input as the database will assign a ID to it.
-			   String name = nameTF.getText();
-			   String type = typeTF.getText();
-			   String price = priceTF.getText();
-			   String location = locationTF.getText();
-			   String vendor = vendorTF.getText();
-			   String quantity = quantityTF.getText();
-			   String discount = discountTF.getText();
-			   
-			   //Convert properties that need to be a different data type
-			   try {
-			 //  int idInt = Integer.parseInt(id);
-			   int quantityInt = Integer.parseInt(quantity);
-			   double priceDouble = Double.parseDouble(price);
-			   boolean discountBoolean = Boolean.parseBoolean(discount);
-			   
-			   //Call the add to DB function to add product to the table and to push to arraylist
-			   dbObject.insertIntoTable( name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
-			   //Copy the table and initialize it with the new inventory list
-			   JTable newT = new JTable(tableModel);
-			   newT = createTable(ListOperations.flowerShopImsList);
-			   listT.setModel(newT.getModel());  //replace table with updated table
-			   JOptionPane.showMessageDialog(master, "Product:"+name+" added!");  
-			   //Clears the text fields
-			   idTF.setText("");
-			   nameTF.setText("");
-			   typeTF.setText("");
-			   priceTF.setText("");
-			   locationTF.setText("");
-			   vendorTF.setText("");
-			   quantityTF.setText("");
-			   discountTF.setText("");
-			   
-			   //Refreshes the table
-			   productListP.revalidate();
-			   productListP.repaint();
-			   }
-			   catch(Exception e1) {
-					JOptionPane.showMessageDialog(master, "No product added. Please use correct data format for input.");  
-					}
-			   
-			 
+			  EF.editF.setTitle("Add Product Form");
+			  EF.submitB.setText("Add Product");
+			  EF.editF.setVisible(true);
 		   }
 		   
 		   //Update Product Button - updates a product listing in the table
 		   else if(e.getSource() == updateB) {
-			   //Get input from the edit form
-			   String id = idTF.getText();
-			   String name = nameTF.getText();
-			   String type = typeTF.getText();
-			   String price = priceTF.getText();
-			   String location = locationTF.getText();
-			   String vendor = vendorTF.getText();
-			   String quantity = quantityTF.getText();
-			   String discount = discountTF.getText();
-			   
-			   //Convert properties that need to be a different data type
-			   try {
-			   int idInt = Integer.parseInt(id);
-			   int quantityInt = Integer.parseInt(quantity);
-			   double priceDouble = Double.parseDouble(price);
-			   boolean discountBoolean = Boolean.parseBoolean(discount);
-			   
-			   //Calls the update function to update the product's properties in the database
-			   dbObject.updateTable(idInt, name, type, priceDouble, location, vendor, quantityInt, discountBoolean);
-			   
-			 //Display updated message.
-			   JOptionPane.showMessageDialog(master, "Product ID:"+id+" updated!");  
-				
-			   //Clears the text fields
-			   idTF.setText("");
-			   nameTF.setText("");
-			   typeTF.setText("");
-			   priceTF.setText("");
-			   locationTF.setText("");
-			   vendorTF.setText("");
-			   quantityTF.setText("");
-			   discountTF.setText("");
-			   
-			   //Copy the table and initialize it with the new inventory list
-			   JTable newT = new JTable(tableModel);
-			   newT = createTable(ListOperations.flowerShopImsList);
-			   listT.setModel(newT.getModel());   //replace table with updated table
+			   EF.ID = JOptionPane.showInputDialog(master, "Enter the Product ID of the product you would like to update", "Update Product ID", JOptionPane.OK_CANCEL_OPTION);   //Creates a dialog box to ask for the product ID
+			   if(EF.ID == null) {
+				     JOptionPane.showMessageDialog(master, "Update operation cancelled");
 			   }
-			   catch(NumberFormatException e1) {
-				JOptionPane.showMessageDialog(master, "No product updated. Please use correct data format for input.");  
-				}
-			   
-			   
+			   else {
+				   EF.editF.setTitle("Update Product Form");
+				   EF.submitB.setText("Update Product");
+				   EF.editF.setVisible(true);
+			   }
 		   }
 		   
 		   //Remove Product Button - removes a product listing from the table
 		   if(e.getSource() == removeB) {
 			   int productID =0;
 			   String removeText = JOptionPane.showInputDialog(master, "Enter Product ID");   //Creates a dialog box to ask for the product ID
-			   try {
-			   productID = Integer.parseInt(removeText);   //Convert input to an integer
+			   if(removeText == null) {
+				   JOptionPane.showMessageDialog(master, "Remove operation cancelled");
+			   }
+			   else {
+				   try {
+					   productID = Integer.parseInt(removeText);   //Convert input to an integer
 			   
-			   //Call the remove function to remove the product listing
-			   int flag=dbObject.deleteTable(productID);
-			   if(flag!=0) {
-			   JOptionPane.showMessageDialog(master, "Product ID:"+productID+" removed!"); 
-			   }
-			   else
-				   JOptionPane.showMessageDialog(master, "Product ID not present!"); 
+					   //Call the remove function to remove the product listing
+					   int flag=dbObject.deleteTable(productID);
+					   if(flag!=0) {
+						   JOptionPane.showMessageDialog(master, "Product ID: "+productID+" removed!"); 
+					   }
+					   else {
+						   JOptionPane.showMessageDialog(master, "Product ID not present!"); 
+					   }
 			     
-			   //Copy the table and initialize it with the new inventory list
-			   JTable newT = new JTable(tableModel);
-			   newT = createTable(ListOperations.flowerShopImsList);
-			   listT.setModel(newT.getModel());   //replace table with updated table
+					   //Copy the table and initialize it with the new inventory list
+					   JTable newT = new JTable(tableModel);
+					   newT = createTable(listOp.flowerShopImsList);
+					   listT.setModel(newT.getModel());   //replace table with updated table
   
-			   //Refreshes the table
-			   productListP.revalidate();
-			   productListP.repaint();
-			   }
-			   catch(NumberFormatException e1) {
-				  JOptionPane.showMessageDialog(master, "No product removed.Please use correct data format for input.");  
+					   //Refreshes the table
+					   productListP.revalidate();
+					   productListP.repaint();
+				   }
+				   catch(NumberFormatException e1) {
+					   JOptionPane.showMessageDialog(master, "No product removed.Please use correct data format for input.");  
+				   }
 			   }
 		   }
 	   }
