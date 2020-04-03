@@ -6,12 +6,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import backendOperations.ListOperations;
 
 public class DatabaseConnection {
 	
-	Connection connection;
+	public Connection connection;
 	Statement statement;
 	ResultSet resultset;
 	DatabaseMetaData  databasetMetaData;
@@ -24,7 +27,7 @@ public class DatabaseConnection {
 		try{  
 			Class.forName("com.mysql.cj.jdbc.Driver");  
 			connection=DriverManager.getConnection(  
-			"jdbc:mysql://localhost:3306/LidDatabase?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CST","root","C00kie123");  
+			"jdbc:mysql://localhost:3306/LidDatabase?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CST","root","Infosys123");  
 			//here LidDatabase is database name, root is username and password is stated 
 			databasetMetaData = connection.getMetaData();
 			}
@@ -164,4 +167,107 @@ public class DatabaseConnection {
 			return flag;
 
 		}
+		
+		// Searching the PO table
+		public  void searchPoTable() {
+			
+			try{  
+				
+				statement=connection.createStatement();  
+				resultset=statement.executeQuery("select * from PO_table");  
+				while(resultset.next())  {
+				System.out.println(resultset.getInt(1)+"  "+resultset.getInt(2)+""+resultset.getString(2)+"  "+resultset.getString(3));
+				}
+				}
+			catch(Exception e)
+			{ System.out.println(e);}  
+		}
+
+		
+		// Inserting a value into the table
+				public  void insertIntoPoTable( 
+											int ProductID,
+											String ProductName, String ProductType,
+											String Location, String VendorID,
+											int Quantity
+											) {
+					
+					try{  
+						DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+						Date date = new Date();
+						System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+						statement=connection.createStatement();  
+						statement.executeUpdate("insert into PO_table values (null,"
+								+ProductID+"'"
+								+ProductName+"','"
+								+ProductType+"',"
+								+Location+"','"
+								+VendorID+"',"
+								+Quantity+","
+								+dateFormat.format(date)+")"
+								
+						);  
+						resultset=statement.executeQuery("select * from from IMS_manager where ProductID="+ProductID);  
+						while(resultset.next())  {
+							
+						listoperation.update( resultset.getInt(1), ProductName, ProductType, resultset.getDouble(4), Location, VendorID, Quantity, resultset.getBoolean(8));
+						
+						}
+						
+					}
+					catch(Exception e)
+					{ System.out.println(e);}  
+				
+				}
+			
+				//Updating a record 
+				public  void updatePoTable( 
+						int PoID, int ProductID,
+						String ProductName, String ProductType,
+						String Location, String VendorID,
+						int Quantity,
+						boolean Discount) {
+
+					try{  
+
+						statement=connection.createStatement();  
+						statement.executeUpdate("update PO_table set ProductID="
+								+ProductID+ ", ProductName='"
+								+ProductName+"', ProductType='"
+								+ProductType+"', SalePrice="
+								+Location+"', VendorID='"
+								+VendorID+"', Quantity="
+								+Quantity+"where PoID="
+								+PoID
+								);  	
+						
+						resultset=statement.executeQuery("select * from from IMS_manager where ProductID="+ProductID);  
+						while(resultset.next())  {
+							
+						listoperation.update( resultset.getInt(1), ProductName, ProductType, resultset.getDouble(4), Location, VendorID, Quantity, resultset.getBoolean(8));
+						}
+
+					}
+					catch(Exception e)
+					{ 
+						System.out.println(e);
+					}  
+
+				}
+				
+				// Deleting a record
+				public  int deletePoTable(int PoID) {
+					int flag=0;
+					try {
+						statement = connection.createStatement();  
+						flag = statement.executeUpdate("delete from PO_table where PoID="+PoID);  
+						
+					}
+					catch(Exception e)
+					{ System.out.println(e);
+					} 
+					return flag;
+
+				}
+				
 }

@@ -1,5 +1,7 @@
 package backendCore;
 
+import java.util.Date;
+
 /*
  * 
  * Class that creates a list element.
@@ -9,10 +11,11 @@ package backendCore;
 
 public class ListElement {
 	
-	public int ProductID, QuantityOnHand;
+	public int ProductID,QuantityOnHand;
 	public String ProductName, ProductType, Location,VendorID;
 	public double SalePrice;
 	public boolean Discount;
+
 	
 	//Initiating a list element using a constructor
 	public ListElement() {
@@ -24,6 +27,7 @@ public class ListElement {
 		VendorID = null;
 		QuantityOnHand = 0;
 		Discount = false;
+	
 	}
 	
 	// Sets the values for each field of the list element.
@@ -52,6 +56,7 @@ public class ListElement {
 		this.Discount = discount;
 	}
 	
+	
 	// Returns the values for each field of the list element.
 	public int getProductID() {
 		return this.ProductID;
@@ -77,5 +82,6 @@ public class ListElement {
 	public boolean getDiscount() {
 		return this.Discount;
 	}
+	
 
 }

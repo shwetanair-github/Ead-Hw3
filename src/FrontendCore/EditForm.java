@@ -168,6 +168,8 @@ public class EditForm extends JFrame implements ActionListener{
 				  main.listT.setModel(newT.getModel()); //replace table with updated table
 			}
 			
+			
+			
 		}
 		
 	}

@@ -2,7 +2,11 @@ package FrontendCore;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -15,18 +19,18 @@ public class MainMenu extends JFrame implements ActionListener {
 	JFrame master;
 	
 	//Declare panels
-	JPanel mainP, titleP, editP, editFormP, editButtonP, productListP, searchP, searchTextFieldP, sortP;
+	JPanel mainP, titleP, editP, editFormP, editButtonP, productListP, searchP, searchTextFieldP, sortP, editPOButtonP;
 	
 	private JScrollPane tableP;
 	
 	//Declare labels
-	private JLabel titleL, sortL, searchHint;
+	private JLabel titleL, sortL, searchHint, invisL;
 	
 	//Declare text field
-	private JTextField searchTF;
+	private JTextField searchTF,idTF, nameTF, typeTF, priceTF, quantityTF, locationTF, vendorTF, discountTF;
 	
 	//Declare buttons
-	private JButton allB, searchB, vendorB, typeB, locationB, priceB, quantityB, discountB, addB, removeB, updateB;
+	private JButton allB, searchB, vendorB, typeB, locationB, priceB, quantityB, discountB, addB, removeB, updateB, stockVendorB, addPoB, updatePoB, removePoB;
 	
 	//Declare strings
 	String productInfo;
@@ -129,43 +133,70 @@ public class MainMenu extends JFrame implements ActionListener {
 		//Add the product list panel to the main panel
 		mainP.add(productListP, BorderLayout.LINE_START);
 		
+		//Initialize text fields for vendor panel
+		idTF = new JTextField(15);
+		nameTF = new JTextField(15);
+		typeTF = new JTextField(15);
+		priceTF = new JTextField(15);
+		quantityTF = new JTextField(15);
+		locationTF = new JTextField(15);
+		vendorTF = new JTextField(15);
+		discountTF = new JTextField(15);
+		
 		//Edit panel that contains a form to add/update a product and a button to remove a product
 		editButtonP = new JPanel();
 		
-		editButtonP.setLayout(new GridLayout(5,1));
+		editButtonP.setLayout(new GridLayout(7,1));
 		editButtonP.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
-			(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(20,20,20,20)))));
+			(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(50,20,20,20)))));
 		
 		//initialize edit panel buttons
 		addB = new JButton("Add Product");
 		updateB = new JButton("Update Product");
 		removeB = new JButton("Remove Product");
+		stockVendorB = new JButton("Purchase Orders to Vendors");
 		
 		addB.addActionListener(this);
 		updateB.addActionListener(this);
 		removeB.addActionListener(this);
+		stockVendorB.addActionListener(this);
 		
 		//Add buttons to main panel
-		JLabel invisL = new JLabel(" "); //invisible components to create spacing between buttons
-		JLabel invisL2 = new JLabel(" ");
+		 //invisible components to create spacing between buttons
+		invisL = new JLabel(" Make changes to inventory stock ");
 		
-		editButtonP.add(addB);
 		editButtonP.add(invisL);
+		editButtonP.add(addB);
 		editButtonP.add(updateB);
-		editButtonP.add(invisL2);
 		editButtonP.add(removeB);
+		editButtonP.add(stockVendorB);
 		
 		//Center align buttons
 		addB.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		updateB.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		removeB.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		stockVendorB.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		
+		//PO Panel
+		editPOButtonP = new JPanel();
+		
+		//initialize PO edit panel buttons
+		addPoB = new JButton("Create Purchase Order");
+		updatePoB = new JButton("Update Purchase Order");
+		removePoB = new JButton("Remove Purchase Order");
+		
+		
+		editPOButtonP.setLayout(new GridLayout(7,1));
+		editPOButtonP.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+			(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(50,20,20,20)))));
+		
 
 		//Add button container to main container
 		mainP.add(editButtonP, BorderLayout.LINE_END);
 
 		//Set super Frame properties
 	    master.setTitle("Flower shop IMS Main Menu");  // "super" Frame sets its title
-	    master.setSize(1000, 450);        // "super" Frame sets its initial window size
+	    master.setSize(1100, 450);        // "super" Frame sets its initial window size
 	    //master.setResizable(false);
 	    
 	    master.setVisible(true);         // "super" Frame shows
@@ -196,6 +227,39 @@ public class MainMenu extends JFrame implements ActionListener {
 			return table;
 		}
 		
+		//Function to create a table of the PO
+				public JTable createPOTable() {
+					String[] colNames = {"PO ID","ProductID","ProductName","ProductType","Location","Vendor","Quantity in PO","Date of PO"};  //column names
+					tableModel = new DefaultTableModel(colNames,0);  //initialize the table model
+					JTable table = new JTable(tableModel);  //initialize the table
+					
+					//Goes through each element in the table and gets their properties
+					try{  
+						
+						Statement statement=dbObject.connection.createStatement();  
+						ResultSet resultset=statement.executeQuery("select * from PO_table");  
+						while(resultset.next())  {
+						System.out.println(resultset.getInt(1)+"  "+resultset.getInt(2)+""+resultset.getString(2)+"  "+resultset.getString(3));
+						int POid = resultset.getInt(1);
+						int Productid = resultset.getInt(2);
+						String name = resultset.getString(3);
+						String type =resultset.getString(4);
+						String location = resultset.getString(5);
+						String vendor = resultset.getString(6);
+						int quantity = resultset.getInt(7);
+						Date datevalue = resultset.getDate(8);
+						Object[] po = {POid, Productid, name, type, location, vendor, quantity, datevalue}; //Add product properties to an object array
+						tableModel.addRow(po);   //Create table row containing product data
+					
+						}
+						
+						}
+					catch(Exception e)
+					{ System.out.println(e);}  
+					
+					return table;
+				}
+		
 		public void displayListInFrame(ArrayList<ListElement> flowerShopImsList) {
 			for (Object obj : flowerShopImsList) {
 	            ListElement node = (ListElement) obj;
@@ -211,6 +275,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   ListOperations listOp = new ListOperations();
 		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   EditForm EF = new EditForm();
+		  
 		   
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
@@ -330,7 +395,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   }
 		   
 		   //Remove Product Button - removes a product listing from the table
-		   if(e.getSource() == removeB) {
+		   else if(e.getSource() == removeB) {
 			   int productID =0;
 			   String removeText = JOptionPane.showInputDialog(master, "Enter Product ID");   //Creates a dialog box to ask for the product ID
 			   if(removeText == null) {
@@ -362,6 +427,46 @@ public class MainMenu extends JFrame implements ActionListener {
 					   JOptionPane.showMessageDialog(master, "No product removed.Please use correct data format for input.");  
 				   }
 			   }
+		   }
+		   
+		   if(e.getSource() == stockVendorB) {
+
+				 JPanel myPanel = new JPanel();   //Panel that holds all other Panels
+					
+					
+
+					//Purchase order and product panel that displays the product inventory
+				 	productListP = new JPanel();
+					
+					//Set formats for panels
+					productListP.setPreferredSize(new Dimension(700,325));   //Sets the product list panel's size
+					productListP.setLayout(new BoxLayout(productListP, BoxLayout.Y_AXIS));   //sets the product list's layout to be in a vertical alignment
+					productListP.setBorder(BorderFactory.createLoweredBevelBorder());   //creates a bevel border for the product list panel
+					
+					
+					//Table Panel that displays the inventory
+					JTable listT = createPOTable();  //creates the table
+					listT.setFillsViewportHeight(true);   //set table height
+					
+					JScrollPane tableP = new JScrollPane(listT);
+					tableP.setPreferredSize(new Dimension(110,200));  //sets size of table panel
+				
+					
+					// Add table to the panel
+					productListP.add(tableP);
+					
+				
+					
+					//Add the product list panel to the main panel
+					myPanel.add(productListP, BorderLayout.LINE_END);
+					
+				   
+					JOptionPane.showMessageDialog(master, myPanel, 
+				               "The Stocking and Vendor PO panel", JOptionPane.OK_CANCEL_OPTION);
+				   
+				   
+				   
+			   
 		   }
 	   }
 }
