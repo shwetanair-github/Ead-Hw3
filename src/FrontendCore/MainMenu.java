@@ -177,19 +177,6 @@ public class MainMenu extends JFrame implements ActionListener {
 		removeB.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		stockVendorB.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		
-		//PO Panel
-		editPOButtonP = new JPanel();
-		
-		//initialize PO edit panel buttons
-		addPoB = new JButton("Create Purchase Order");
-		updatePoB = new JButton("Update Purchase Order");
-		removePoB = new JButton("Remove Purchase Order");
-		
-		
-		editPOButtonP.setLayout(new GridLayout(7,1));
-		editPOButtonP.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
-			(BorderFactory.createCompoundBorder(BorderFactory.createLoweredBevelBorder(), BorderFactory.createEmptyBorder(50,20,20,20)))));
-		
 
 		//Add button container to main container
 		mainP.add(editButtonP, BorderLayout.LINE_END);
@@ -227,45 +214,15 @@ public class MainMenu extends JFrame implements ActionListener {
 			return table;
 		}
 		
-		//Function to create a table of the PO
-				public JTable createPOTable() {
-					String[] colNames = {"PO ID","ProductID","ProductName","ProductType","Location","Vendor","Quantity in PO","Date of PO"};  //column names
-					tableModel = new DefaultTableModel(colNames,0);  //initialize the table model
-					JTable table = new JTable(tableModel);  //initialize the table
-					
-					//Goes through each element in the table and gets their properties
-					try{  
-						
-						Statement statement=dbObject.connection.createStatement();  
-						ResultSet resultset=statement.executeQuery("select * from PO_table");  
-						while(resultset.next())  {
-						System.out.println(resultset.getInt(1)+"  "+resultset.getInt(2)+""+resultset.getString(2)+"  "+resultset.getString(3));
-						int POid = resultset.getInt(1);
-						int Productid = resultset.getInt(2);
-						String name = resultset.getString(3);
-						String type =resultset.getString(4);
-						String location = resultset.getString(5);
-						String vendor = resultset.getString(6);
-						int quantity = resultset.getInt(7);
-						Date datevalue = resultset.getDate(8);
-						Object[] po = {POid, Productid, name, type, location, vendor, quantity, datevalue}; //Add product properties to an object array
-						tableModel.addRow(po);   //Create table row containing product data
-					
-						}
-						
-						}
-					catch(Exception e)
-					{ System.out.println(e);}  
-					
-					return table;
-				}
 		
+				
+				
+		// Displays the arraylist with the product list
 		public void displayListInFrame(ArrayList<ListElement> flowerShopImsList) {
 			for (Object obj : flowerShopImsList) {
 	            ListElement node = (ListElement) obj;
 	            productInfo = node.getProductID() + node.getProductName()+ node.getSalePrice()
 	            + node.getVendorID()+ node.getQuantityOnHand();
-	            System.out.println(" list in frame:- " + productInfo);
 	            listToDisplay.add(productInfo);
 		   	}
 		}
@@ -275,7 +232,7 @@ public class MainMenu extends JFrame implements ActionListener {
 		   ListOperations listOp = new ListOperations();
 		   ArrayList<ListElement> tempList = new ArrayList<ListElement>();
 		   EditForm EF = new EditForm();
-		  
+		   VendorFrame vf = new VendorFrame();
 		   
 		   //Refresh List Button - Refreshes the product table 
 		   if(e.getSource() == allB) {
@@ -430,42 +387,10 @@ public class MainMenu extends JFrame implements ActionListener {
 		   }
 		   
 		   if(e.getSource() == stockVendorB) {
+			   
+				   vf.vendorFrame.setTitle("Stock and PO details");
+				   vf.vendorFrame.setVisible(true);
 
-				 JPanel myPanel = new JPanel();   //Panel that holds all other Panels
-					
-					
-
-					//Purchase order and product panel that displays the product inventory
-				 	productListP = new JPanel();
-					
-					//Set formats for panels
-					productListP.setPreferredSize(new Dimension(700,325));   //Sets the product list panel's size
-					productListP.setLayout(new BoxLayout(productListP, BoxLayout.Y_AXIS));   //sets the product list's layout to be in a vertical alignment
-					productListP.setBorder(BorderFactory.createLoweredBevelBorder());   //creates a bevel border for the product list panel
-					
-					
-					//Table Panel that displays the inventory
-					JTable listT = createPOTable();  //creates the table
-					listT.setFillsViewportHeight(true);   //set table height
-					
-					JScrollPane tableP = new JScrollPane(listT);
-					tableP.setPreferredSize(new Dimension(110,200));  //sets size of table panel
-				
-					
-					// Add table to the panel
-					productListP.add(tableP);
-					
-				
-					
-					//Add the product list panel to the main panel
-					myPanel.add(productListP, BorderLayout.LINE_END);
-					
-				   
-					JOptionPane.showMessageDialog(master, myPanel, 
-				               "The Stocking and Vendor PO panel", JOptionPane.OK_CANCEL_OPTION);
-				   
-				   
-				   
 			   
 		   }
 	   }

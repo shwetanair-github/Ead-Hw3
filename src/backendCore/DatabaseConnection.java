@@ -10,6 +10,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.JFormattedTextField;
+
+import org.jdatepicker.JDatePicker;
+
 import backendOperations.ListOperations;
 
 public class DatabaseConnection {
@@ -109,9 +113,9 @@ public class DatabaseConnection {
 						+Discount+")"
 						
 				);  
+				// Updating the arraylist for easy population of dataframe
 				resultset=statement.executeQuery("select max(ProductID) from IMS_manager");  
 				while(resultset.next())  {
-					
 				listoperation.push( resultset.getInt(1), ProductName, ProductType, SalePrice, Location, VendorID, QuantityOnHand, Discount);
 				
 				}
@@ -143,6 +147,7 @@ public class DatabaseConnection {
 						+Discount+" where ProductID="
 						+ProductID
 						);  	
+				// Updating the arraylist to use in the frame
 				listoperation.update( ProductID, ProductName, ProductType, SalePrice, Location, VendorID, QuantityOnHand, Discount);
 
 			}
@@ -189,28 +194,28 @@ public class DatabaseConnection {
 											int ProductID,
 											String ProductName, String ProductType,
 											String Location, String VendorID,
-											int Quantity
+											int Quantity,
+											Date date
 											) {
 					
 					try{  
 						DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-						Date date = new Date();
-						System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+						
 						statement=connection.createStatement();  
 						statement.executeUpdate("insert into PO_table values (null,"
-								+ProductID+"'"
-								+ProductName+"','"
-								+ProductType+"',"
-								+Location+"','"
-								+VendorID+"',"
-								+Quantity+","
-								+dateFormat.format(date)+")"
+								+ProductID+", '"
+								+ProductName+"', '"
+								+ProductType+"', '"
+								+Location+"', '"
+								+VendorID+"', "
+								+Quantity+", '"
+								+dateFormat.format(date)+"')"
 								
 						);  
-						resultset=statement.executeQuery("select * from from IMS_manager where ProductID="+ProductID);  
+						resultset=statement.executeQuery("select * from IMS_manager where ProductID="+ProductID);  
 						while(resultset.next())  {
-							
-						listoperation.update( resultset.getInt(1), ProductName, ProductType, resultset.getDouble(4), Location, VendorID, Quantity, resultset.getBoolean(8));
+						// Updating the list and product DB	
+							updateTable( resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getDouble(4), resultset.getString(5), resultset.getString(6), Quantity+resultset.getInt(7), resultset.getBoolean(8));
 						
 						}
 						
@@ -226,7 +231,9 @@ public class DatabaseConnection {
 						String ProductName, String ProductType,
 						String Location, String VendorID,
 						int Quantity,
-						boolean Discount) {
+						Date date) {
+					
+					DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 					try{  
 
@@ -234,17 +241,18 @@ public class DatabaseConnection {
 						statement.executeUpdate("update PO_table set ProductID="
 								+ProductID+ ", ProductName='"
 								+ProductName+"', ProductType='"
-								+ProductType+"', SalePrice="
+								+ProductType+"', Location='"
 								+Location+"', VendorID='"
 								+VendorID+"', Quantity="
-								+Quantity+"where PoID="
+								+Quantity+", PoDate='"
+								+dateFormat.format(date)+"' where PoID="
 								+PoID
 								);  	
 						
-						resultset=statement.executeQuery("select * from from IMS_manager where ProductID="+ProductID);  
+						resultset=statement.executeQuery("select * from IMS_manager where ProductID="+ProductID);  
 						while(resultset.next())  {
-							
-						listoperation.update( resultset.getInt(1), ProductName, ProductType, resultset.getDouble(4), Location, VendorID, Quantity, resultset.getBoolean(8));
+						// Updating the list 
+							updateTable( resultset.getInt(1), resultset.getString(2), resultset.getString(3), resultset.getDouble(4), resultset.getString(5), resultset.getString(6), Quantity+resultset.getInt(7), resultset.getBoolean(8));
 						}
 
 					}

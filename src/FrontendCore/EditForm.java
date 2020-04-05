@@ -113,13 +113,10 @@ public class EditForm extends JFrame implements ActionListener{
 					  JOptionPane.showMessageDialog(main.master,"No product added. Please use correct data format for input."); 
 				  }
 				 
-				  //Copy the table and initialize it with the new inventory list 
-				  DefaultTableModel listTModel = (DefaultTableModel)main.listT.getModel();
-				  listTModel.fireTableDataChanged();
-				  
-				  //Refreshes the table 
-				  main.productListP.revalidate(); 
-				  main.productListP.repaint();
+				//Copy the table and initialize it with the new inventory list 
+				  JTable newT = new JTable(main.tableModel); 
+				  newT = main.createTable(listOp.flowerShopImsList);
+				  main.listT.setModel(newT.getModel()); //replace table with updated table
 			}
 			else if(submitB.getText() == "Update Product"){
 				//Get the edit form's inputs 
